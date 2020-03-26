@@ -9,7 +9,15 @@ router.get("/", async (req, res) => {
   res.send(await pizzas.find({}).toArray());
 });
 
-// Add Pizza Score
+//Get Pizza
+router.get("/:id", async (req, res) => {
+  const pizzas = await loadPizzaCollection();
+  res.send(
+    await pizzas.find({ _id: new mongodb.ObjectID(req.params.id) }).toArray()
+  );
+});
+
+// Add Pizza
 router.post("/", async (req, res) => {
   const pizzas = await loadPizzaCollection();
 
@@ -30,6 +38,24 @@ router.delete("/:id", async (req, res) => {
   await pizzas.deleteOne({ _id: new mongodb.ObjectID(req.params.id) });
 
   res.status(200).send();
+});
+
+router.put("/:id", async (req, res) => {
+  const pizzas = await loadPizzaCollection();
+
+  const response = await pizzas.updateOne({
+    _id: new mongodb.ObjectID(req.params.id),
+    restaurant: req.body.restaurant,
+    pizza: req.body.pizza,
+    description: req.body.description,
+    style: req.body.style,
+    score: req.body.score,
+    updatedAt: new Date()
+  });
+
+  console.log(response);
+
+  res.status(204).send();
 });
 
 async function loadPizzaCollection() {
