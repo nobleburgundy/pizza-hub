@@ -6,8 +6,14 @@ const router = express.Router();
 // Get Pizzas
 router.get("/", async (req, res) => {
   const pizzas = await loadPizzaCollection();
+  console.log(req.query);
+  // Check for query parameter
   if (Object.keys(req.query).length) {
-    res.send(await pizzas.find({ restaurant: req.query.restaurant }).toArray());
+    //score has to be int
+    if (req.query.score) {
+      req.query.score = parseInt(req.query.score);
+    }
+    res.send(await pizzas.find(req.query).toArray());
   } else {
     res.send(await pizzas.find({}).toArray());
   }
