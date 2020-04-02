@@ -6,10 +6,14 @@ const router = express.Router();
 // Get Pizzas
 router.get("/", async (req, res) => {
   const pizzas = await loadPizzaCollection();
-  res.send(await pizzas.find({}).toArray());
+  if (Object.keys(req.query).length) {
+    res.send(await pizzas.find({ restaurant: req.query.restaurant }).toArray());
+  } else {
+    res.send(await pizzas.find({}).toArray());
+  }
 });
 
-//Get Pizza
+//Get Pizza by id
 router.get("/:id", async (req, res) => {
   const pizzas = await loadPizzaCollection();
   res.send(
