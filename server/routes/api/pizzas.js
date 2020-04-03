@@ -6,7 +6,6 @@ const router = express.Router();
 // Get Pizzas
 router.get("/", async (req, res) => {
   const pizzas = await loadPizzaCollection();
-  console.log(req.query);
   // Check for query parameter
   if (Object.keys(req.query).length) {
     //score has to be int
@@ -37,7 +36,7 @@ router.post("/", async (req, res) => {
     description: req.body.description,
     style: req.body.style,
     score: req.body.score,
-    createdAt: new Date()
+    createdAt: new Date(),
   });
   res.status(201).send();
 });
@@ -60,7 +59,7 @@ router.put("/:id", async (req, res) => {
     description: req.body.description,
     style: req.body.style,
     score: req.body.score,
-    updatedAt: new Date()
+    updatedAt: new Date(),
   });
 
   console.log(response);
@@ -72,7 +71,8 @@ async function loadPizzaCollection() {
   const client = await mongodb.MongoClient.connect(
     "mongodb+srv://james123:james123@cluster0-zljzo.mongodb.net/pizza_club?retryWrites=true&w=majority",
     {
-      useNewUrlParser: true
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     }
   );
 

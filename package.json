@@ -1,7 +1,7 @@
 {
-  "name": "fullstackpctest",
+  "name": "pizzahub",
   "version": "1.0.0",
-  "description": "Full stack Pizza Club test app",
+  "description": "Backend for the Pizza Club app",
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
