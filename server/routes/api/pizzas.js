@@ -39,6 +39,7 @@ router.post("/", async (req, res) => {
     createdAt: new Date(),
   });
   res.status(201).send();
+  // console.log(res);
 });
 
 // Delete Post
