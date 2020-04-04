@@ -30,16 +30,21 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const pizzas = await loadPizzaCollection();
 
-  await pizzas.insertOne({
-    restaurant: req.body.restaurant,
-    pizza: req.body.pizza,
-    description: req.body.description,
-    style: req.body.style,
-    score: req.body.score,
-    createdAt: new Date(),
-  });
-  res.status(201).send();
-  // console.log(res);
+  const response = await pizzas
+    .insertOne({
+      restaurant: req.body.restaurant,
+      pizza: req.body.pizza,
+      description: req.body.description,
+      style: req.body.style,
+      score: req.body.score,
+      createdAt: new Date(),
+    })
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((err) => {
+      res.send({ err });
+    });
 });
 
 // Delete Post
