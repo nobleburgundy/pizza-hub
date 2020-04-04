@@ -17,6 +17,7 @@
     "mongodb": "^3.5.5"
   },
   "devDependencies": {
+    "husky": "^4.2.3",
     "nodemon": "^2.0.2"
   }
 }
