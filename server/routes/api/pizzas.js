@@ -58,8 +58,7 @@ router.delete("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const pizzas = await loadPizzaCollection();
-
-  const response = await pizzas.updateOne({
+  const payload = {
     _id: new mongodb.ObjectID(req.params.id),
     restaurant: req.body.restaurant,
     pizza: req.body.pizza,
@@ -67,9 +66,25 @@ router.put("/:id", async (req, res) => {
     style: req.body.style,
     score: req.body.score,
     updatedAt: new Date(),
-  });
+  };
+  console.log(payload);
+  var ObjectID = require("mongodb").ObjectID;
 
-  console.log(response);
+  const response = await pizzas.updateOne(
+    {
+      _id: ObjectID(req.body._id),
+    },
+    {
+      $set: {
+        restaurant: req.body.restaurant,
+        pizza: req.body.pizza,
+        description: req.body.description,
+        style: req.body.style,
+        score: req.body.score,
+        updatedAt: new Date(),
+      },
+    }
+  );
 
   res.status(204).send();
 });
