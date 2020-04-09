@@ -30,7 +30,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const pizzas = await loadPizzaCollection();
 
-  const response = await pizzas
+  await pizzas
     .insertOne({
       restaurant: req.body.restaurant,
       pizza: req.body.pizza,
@@ -51,42 +51,44 @@ router.post("/", async (req, res) => {
 // Delete Post
 router.delete("/:id", async (req, res) => {
   const pizzas = await loadPizzaCollection();
-  await pizzas.deleteOne({ _id: new mongodb.ObjectID(req.params.id) });
-
-  res.status(200).send();
+  await pizzas
+    .deleteOne({ _id: new mongodb.ObjectID(req.params.id) })
+    .then((response) => {
+      res.statusCode = 200;
+      res.send(response);
+    })
+    .catch((err) => {
+      res.send({ err });
+    });
 });
 
 router.put("/:id", async (req, res) => {
   const pizzas = await loadPizzaCollection();
-  const payload = {
-    _id: new mongodb.ObjectID(req.params.id),
-    restaurant: req.body.restaurant,
-    pizza: req.body.pizza,
-    description: req.body.description,
-    style: req.body.style,
-    score: req.body.score,
-    updatedAt: new Date(),
-  };
-  console.log(payload);
   var ObjectID = require("mongodb").ObjectID;
 
-  const response = await pizzas.updateOne(
-    {
-      _id: ObjectID(req.body._id),
-    },
-    {
-      $set: {
-        restaurant: req.body.restaurant,
-        pizza: req.body.pizza,
-        description: req.body.description,
-        style: req.body.style,
-        score: req.body.score,
-        updatedAt: new Date(),
+  await pizzas
+    .updateOne(
+      {
+        _id: ObjectID(req.body._id),
       },
-    }
-  );
-
-  res.status(204).send();
+      {
+        $set: {
+          restaurant: req.body.restaurant,
+          pizza: req.body.pizza,
+          description: req.body.description,
+          style: req.body.style,
+          score: req.body.score,
+          updatedAt: new Date(),
+        },
+      }
+    )
+    .then((response) => {
+      res.statusCode = 204;
+      res.send(response);
+    })
+    .catch((err) => {
+      res.send({ err });
+    });
 });
 
 async function loadPizzaCollection() {
