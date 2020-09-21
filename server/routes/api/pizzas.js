@@ -22,7 +22,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const pizzas = await loadPizzaCollection();
   res.send(
-    await pizzas.find({ _id: new mongodb.ObjectID(req.params.id) }).toArray()
+    await pizzas.find({
+      _id: new mongodb.ObjectID(req.params.id)
+    }).toArray()
   );
 });
 
@@ -44,7 +46,9 @@ router.post("/", async (req, res) => {
       res.send(response);
     })
     .catch((err) => {
-      res.send({ err });
+      res.send({
+        err
+      });
     });
 });
 
@@ -52,13 +56,17 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const pizzas = await loadPizzaCollection();
   await pizzas
-    .deleteOne({ _id: new mongodb.ObjectID(req.params.id) })
+    .deleteOne({
+      _id: new mongodb.ObjectID(req.params.id)
+    })
     .then((response) => {
       res.statusCode = 200;
       res.send(response);
     })
     .catch((err) => {
-      res.send({ err });
+      res.send({
+        err
+      });
     });
 });
 
@@ -67,34 +75,32 @@ router.put("/:id", async (req, res) => {
   var ObjectID = require("mongodb").ObjectID;
 
   await pizzas
-    .updateOne(
-      {
-        _id: ObjectID(req.body._id),
+    .updateOne({
+      _id: ObjectID(req.body._id),
+    }, {
+      $set: {
+        restaurant: req.body.restaurant,
+        pizza: req.body.pizza,
+        description: req.body.description,
+        style: req.body.style,
+        score: req.body.score,
+        updatedAt: new Date(),
       },
-      {
-        $set: {
-          restaurant: req.body.restaurant,
-          pizza: req.body.pizza,
-          description: req.body.description,
-          style: req.body.style,
-          score: req.body.score,
-          updatedAt: new Date(),
-        },
-      }
-    )
+    })
     .then((response) => {
       res.statusCode = 204;
       res.send(response);
     })
     .catch((err) => {
-      res.send({ err });
+      res.send({
+        err
+      });
     });
 });
 
 async function loadPizzaCollection() {
   const client = await mongodb.MongoClient.connect(
-    "mongodb+srv://james123:james123@cluster0-zljzo.mongodb.net/pizza_club?retryWrites=true&w=majority",
-    {
+    "mongodb+srv://james123:james123@cluster0-zljzo.mongodb.net/pizza_club?retryWrites=true&w=majority", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }
