@@ -1,5 +1,6 @@
 const express = require("express");
 const mongodb = require("mongodb");
+const config = require('../../config');
 
 const router = express.Router();
 
@@ -99,6 +100,7 @@ router.put("/:id", async (req, res) => {
 });
 
 async function loadPizzaCollection() {
+  const host = config.development.database.host;
   const client = await mongodb.MongoClient.connect(
     "mongodb+srv://james123:james123@cluster0-zljzo.mongodb.net/pizza_club?retryWrites=true&w=majority", {
       useNewUrlParser: true,
